@@ -1,0 +1,175 @@
+openapi: 3.0.0
+info:
+  title: Book Library API
+  version: 1.0.0
+  description: Полный пример API для библиотеки с доп. полями
+
+paths:
+  /api/books:
+    get:
+      summary: Получить все книги
+      parameters:
+        - name: genre
+          in: query
+          schema:
+            type: string
+          example: science_fiction
+      responses:
+        '200':
+          description: Успешный ответ
+          content:
+            application/json:
+              example: [
+                { 
+                  "id": 1, 
+                  "title": "Dune", 
+                  "author": "Frank Herbert",
+                  "publicationYear": 1965,
+                  "genre": "science_fiction",
+                  "ISBN": "9780441172719",
+                  "status": "AVAILABLE" 
+                }
+              ]
+
+    post:
+      summary: Добавить книгу
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+                - author
+              properties:
+                title:
+                  type: string
+                author:
+                  type: string
+                publicationYear:
+                  type: integer
+                  format: int32
+                genre:
+                  type: string
+                ISBN:
+                  type: string
+                status:
+                  type: string
+                  enum: [AVAILABLE, CHECKED_OUT]
+              example:
+                title: "The Hitchhiker's Guide to the Galaxy"
+                author: "Douglas Adams"
+                publicationYear: 1979
+                genre: "science_fiction"
+                ISBN: "9780517542095"
+                status: "AVAILABLE"
+      responses:
+        '201':
+          description: Книга создана
+          content:
+            application/json:
+              example:
+                id: 3
+                title: "The Hitchhiker's Guide to the Galaxy"
+                author: "Douglas Adams"
+                publicationYear: 1979
+                genre: "science_fiction"
+                ISBN: "9780517542095"
+                status: "AVAILABLE"
+
+  /api/books/{id}:
+    get:
+      summary: Получить книгу по ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Успешный ответ
+          content:
+            application/json:
+              example:
+                id: 1
+                title: "Dune"
+                author: "Frank Herbert"
+                publicationYear: 1965
+                genre: "science_fiction"
+                ISBN: "9780441172719"
+                status: "AVAILABLE"
+        '404':
+          description: Книга не найдена
+
+    put:
+      summary: Полное обновление книги
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              id: 1
+              title: "Dune (Updated)"
+              author: "Frank Herbert"
+              publicationYear: 1965
+              genre: "science_fiction"
+              ISBN: "9780441172719"
+              status: "CHECKED_OUT"
+      responses:
+        '200':
+          description: Успешное обновление
+          content:
+            application/json:
+              example:
+                id: 1
+                title: "Dune (Updated)"
+                author: "Frank Herbert"
+                publicationYear: 1965
+                genre: "science_fiction"
+                ISBN: "9780441172719"
+                status: "CHECKED_OUT"
+
+    patch:
+      summary: Частичное обновление
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              status: "CHECKED_OUT"
+              # Можно обновлять любые поля по отдельности
+      responses:
+        '200':
+          description: Успешное обновление
+          content:
+            application/json:
+              example:
+                status: "CHECKED_OUT"
+
+    delete:
+      summary: Удалить книгу
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Книга удалена
+        '404':
+          description: Книга не найдена
