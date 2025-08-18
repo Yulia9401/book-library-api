@@ -110,22 +110,3 @@ paths:
                 year: 1965
                 genre: "science_fiction"
                 status: "CHECKED_OUT"
-
-    delete:
-      summary: Delete book
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1 
-      responses:
-        '204':
-          description: Book deleted
-          content: 
-            application/json: 
-            example: null 
-        '404':
-          description: Book not found
