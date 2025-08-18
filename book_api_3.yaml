@@ -1,0 +1,131 @@
+openapi: 3.0.3
+info:
+  title: Book Library API
+  version: 1.0.0
+servers: 
+  - url: https://9fbc83ea-906b-4535-b609-c38c8d2463d1.mock.pstmn.io
+    description: Mock server
+
+paths:
+  /api/books:
+    get:
+      summary: Get all books
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              example:
+                - id: 1
+                  title: "Dune"
+                  author: "Frank Herbert"
+                  year: 1965
+                  genre: "science_fiction"
+                  status: "AVAILABLE"
+                - id: 2
+                  title: "Solaris"
+                  author: "Stanislaw Lem"
+                  year: 1961
+                  genre: "science_fiction"
+                  status: "CHECKED_OUT"
+                - id: 3
+                  title: "Foundation"
+                  author: "Isaac Asimov"
+                  year: 1951
+                  genre: "science_fiction"
+                  status: "AVAILABLE"
+
+    post:
+      summary: Add a new book
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              title: "The Hitchhiker's Guide to the Galaxy"
+              author: "Douglas Adams"
+              year: 1979
+              genre: "science_fiction"
+      responses:
+        '201':
+          description: Book created
+          content:
+            application/json:
+              example:
+                id: 4
+                title: "The Hitchhiker's Guide to the Galaxy"
+                author: "Douglas Adams"
+                year: 1979
+                genre: "science_fiction"
+                status: "AVAILABLE"
+
+  /api/books/{id}:
+    get:
+      summary: Get book by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              example:
+                id: 3
+                title: "Dune"
+                author: "Frank Herbert"
+                year: 1965
+                genre: "science_fiction"
+                status: "AVAILABLE"
+        '404':
+          description: Book not found
+
+    put:
+      summary: Update book
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              title: "Dune (Updated)"
+              status: "CHECKED_OUT"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              example:
+                id: 1
+                title: "Dune (Updated)"
+                author: "Frank Herbert"
+                year: 1965
+                genre: "science_fiction"
+                status: "CHECKED_OUT"
+
+    delete:
+      summary: Delete book
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1 
+      responses:
+        '204':
+          description: Book deleted
+          content: 
+            application/json: 
+            example: null 
+        '404':
+          description: Book not found
